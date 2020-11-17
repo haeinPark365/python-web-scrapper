@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 LIMIT = 50
 URL = f"https://kr.indeed.com/취업?q=python&limit={LIMIT}"
 
-def extract_indeed_pages() : 
+def get_last_pages() : 
   request = requests.get(URL)
   soup = BeautifulSoup(request.text, ("html.parser"))
 
@@ -37,7 +37,7 @@ def extract_job(job_soup):
   return {'title':title, 'company':company, 'location':location, 'link': f"https://kr.indeed.com/viewjob?jk={job_id}"}
 
 
-def extract_indeed_jobs(last_page):
+def extract_jobs(last_page):
   jobs = []
   
   for page in range(last_page): 
@@ -49,9 +49,12 @@ def extract_indeed_jobs(last_page):
     for result in results:
       job = extract_job(result)
       jobs.append(job)
-    
   return jobs
 
+def get_jobs():
+  last_page = get_last_pages()
+  jobs = extract_jobs(last_page)
+  return jobs
 
 
 """
