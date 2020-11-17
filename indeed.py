@@ -51,7 +51,6 @@ def extract_indeed_jobs(last_page):
   for result in results:
     job = extract_job(result)
     jobs.append(job)
-    print(job)
 
   return jobs
 
