@@ -16,7 +16,6 @@ def extract_indeed_pages() :
     pages.append(int(link.string))
 
   max_page = pages[-1]
-  print("맨 끝 페이지 :", max_page)
   
   return max_page
 
@@ -26,8 +25,6 @@ def extract_job(job_soup):
   company = job_soup.find("span", {"class" : "company"})
   location = job_soup.find("div", {"class" : "recJobLoc"})["data-rc-loc"]
 
-  #print(location)
-
   company_anchor = company.find("a")
   if company_anchor is None:
     company = company.string
@@ -35,23 +32,24 @@ def extract_job(job_soup):
     company = company_anchor.string
   company = company.strip()
 
-  job_id = job_soup.find()
-  return {'title':title, 'company':company, 'location':location}
+  job_id = job_soup["data-jk"]
+
+  return {'title':title, 'company':company, 'location':location, 'link': f"https://kr.indeed.com/viewjob?jk={job_id}"}
 
 
 def extract_indeed_jobs(last_page):
   jobs = []
   
-  #for page in range(last_page): 
-  request = requests.get(f"{URL}&start={0*LIMIT}")
-  soup = BeautifulSoup(request.text,"html.parser")
+  for page in range(last_page): 
+    print(f"page number : {page}")
+    request = requests.get(f"{URL}&start={0*LIMIT}")
+    soup = BeautifulSoup(request.text,"html.parser")
+    results = soup.find_all("div", {"class" : "jobsearch-SerpJobCard"})
 
-  results = soup.find_all("div", {"class" : "jobsearch-SerpJobCard"})
-
-  for result in results:
-    job = extract_job(result)
-    jobs.append(job)
-
+    for result in results:
+      job = extract_job(result)
+      jobs.append(job)
+    
   return jobs
 
 
