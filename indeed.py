@@ -41,7 +41,7 @@ def extract_jobs(last_page):
   jobs = []
   
   for page in range(last_page): 
-    print(f"page number : {page}")
+    print(f"Scrapping ID: Page: {page}")
     request = requests.get(f"{URL}&start={0*LIMIT}")
     soup = BeautifulSoup(request.text,"html.parser")
     results = soup.find_all("div", {"class" : "jobsearch-SerpJobCard"})
