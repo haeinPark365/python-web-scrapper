@@ -1,2 +1,2 @@
 language = "python3"
-run = "python main.py"
+run = "python show_on_web.py"
